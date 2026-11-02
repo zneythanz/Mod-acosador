@@ -1,0 +1,21 @@
+name: Compilar mod
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - run: unzip -q stalker-horror.zip
+      - run: chmod +x stalker-horror/gradlew
+      - working-directory: stalker-horror
+        run: ./gradlew build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: stalker-horror-mod
+          path: |
+            stalker-horror/build/libs/*.jar
+            !stalker-horror/build/libs/*-sources.jar
